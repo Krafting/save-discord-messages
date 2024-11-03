@@ -1,0 +1,11 @@
+{
+    "use_env_variable": false,
+    "token": "YOUR_BOT_TOKEN",
+    "saved_channels_path": "./saves",
+    "webhooks_file": "./webhooks.json",
+    "only_owner": false,
+    "only_admins": false,
+    "enable_user_whitelist": false,
+    "user_whitelist": [],
+    "hour_region":"Europe/Madrid"
+}
