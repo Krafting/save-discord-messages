@@ -12,6 +12,9 @@ SaveBot is a Discord bot designed to backup and restore messages from Discord ch
   - [Configuración](#configuración)
   - [Comandos](#comandos)
   - [Ejemplos de Uso](#ejemplos-de-uso)
+- [Linux Installation](#linux-installation)
+- [Windows Installation](#windows-installation)
+- [Mac Installation](#mac-installation)
 
 ## English Documentation
 
@@ -109,3 +112,79 @@ SaveBot admite los siguientes comandos:
    !svb help
    ```
 
+
+## Linux Installation
+
+To install Python 3.10.15 and create a virtual environment with dependencies from `requirements.txt`, execute the following command in your terminal:
+
+```bash
+sudo apt update && sudo apt install -y python3.10 python3.10-venv && python3.10 -m venv .venv && source .venv/bin/activate && pip install -r requirements.txt
+```
+
+This command does the following:
+1. Updates the package list.
+2. Installs Python 3.10 and the virtual environment module.
+3. Creates a virtual environment named `.venv`.
+4. Activates the virtual environment.
+5. Installs the dependencies specified in `requirements.txt`.
+
+## Windows Installation
+
+### Step 1: Download and Install Python 3.10.15
+1. Go to the [official Python downloads page](https://www.python.org/downloads/release/python-31015/).
+2. Download the Windows installer for Python 3.10.15.
+3. Run the installer and make sure to check the box that says "Add Python to PATH".
+4. Follow the installation prompts to complete the installation.
+
+### Step 2: Create a Virtual Environment
+1. Open Command Prompt (cmd).
+2. Navigate to your project directory using the `cd` command.
+3. Run the following commands:
+
+```cmd
+python -m venv .venv
+```
+
+### Step 3: Activate the Virtual Environment
+Run the following command to activate the virtual environment:
+
+```cmd
+.\.venv\Scripts\activate
+```
+
+### Step 4: Install Dependencies
+With the virtual environment activated, run:
+
+```cmd
+pip install -r requirements.txt
+```
+
+## Mac Installation
+
+### Step 1: Download and Install Python 3.10.15
+1. Go to the [official Python downloads page](https://www.python.org/downloads/release/python-31015/).
+2. Download the macOS installer for Python 3.10.15.
+3. Run the installer and follow the installation prompts.
+
+### Step 2: Create a Virtual Environment
+1. Open Terminal.
+2. Navigate to your project directory using the `cd` command.
+3. Run the following commands:
+
+```bash
+python3.10 -m venv .venv
+```
+
+### Step 3: Activate the Virtual Environment
+Run the following command to activate the virtual environment:
+
+```bash
+source .venv/bin/activate
+```
+
+### Step 4: Install Dependencies
+With the virtual environment activated, run:
+
+```bash
+pip install -r requirements.txt
+```
