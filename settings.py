@@ -16,6 +16,8 @@ only_owner = data["only_owner"]
 only_admins = data["only_admins"]
 enable_user_whitelist = data["enable_user_whitelist"]
 user_whitelist = data["user_whitelist"]
+compress_data = data["compress_data"]
+
 
 if only_owner:
     only_admins = False

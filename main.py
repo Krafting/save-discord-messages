@@ -2,7 +2,7 @@ import discord
 import json
 import os
 from dump import initdump
-from settings import WEBHOOK_FILE, TOKEN, CHANNEL_PATH, permissions, user_whitelist
+from settings import WEBHOOK_FILE, TOKEN, CHANNEL_PATH, permissions, user_whitelist, compress_data
 
 class MyBot(discord.Client):
     async def on_ready(self):
@@ -71,21 +71,21 @@ class MyBot(discord.Client):
     async def save_messages(self, channel):
         channel_id = channel.id
         json_file = f"{CHANNEL_PATH}/{channel_id}.json"
-
+    
         print(f'Obteniendo mensajes de {channel.name}...')
         messages = []
         async for msg in channel.history(limit=None):
             messages.append(msg)
-
+    
         messages.sort(key=lambda msg: msg.created_at)
-
+    
         message_data = []
         avatars = {}
         for msg in messages:
             user_id = msg.author.id
             if user_id not in avatars:
                 avatars[user_id] = await self.get_avatar_url(msg.author)
-
+    
             message_info = {
                 'message_id': msg.id,
                 'username': msg.author.name,
@@ -96,15 +96,18 @@ class MyBot(discord.Client):
                 'referenced_message_id': msg.reference.message_id if msg.reference else None
             }
             message_data.append(message_info)
-
+    
         data_to_save = {
             'data': message_data,
             'avatars': avatars
         }
-
+    
         with open(json_file, 'w', encoding='utf-8') as f:
-            json.dump(data_to_save, f, ensure_ascii=False, indent=4)
-
+            if compress_data:
+                json.dump(data_to_save, f, ensure_ascii=False, separators=(',', ':'))
+            else:
+                json.dump(data_to_save, f, ensure_ascii=False, indent=4)
+    
         print(f'Se han guardado {len(messages)} mensajes')
         await channel.send(f'Se han guardado {len(messages)} mensajes en {json_file}')
 
