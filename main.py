@@ -165,8 +165,8 @@ class MyBot(discord.Client):
             else:
                 json.dump(data_to_save, f, ensure_ascii=False, indent=4)
     
-        print(f'Se han guardado {len(messages)} mensajes')
-        await channel.send(f'Se han guardado {len(messages)} mensajes en {json_file}')
+        print(f'Saved {len(messages)} messages')
+        await channel.send(f'Saved {len(messages)} messages')
 
     async def get_avatar_url(self, user):
         return str(user.display_avatar.url)

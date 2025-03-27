@@ -1,0 +1,12 @@
+[Unit]
+Description=Save Discord Messages Bot
+After=network-online.target
+
+[Service]
+WorkingDirectory=/opt/save-discord-messages/
+ExecStart=/opt/save-discord-messages/main.sh
+Restart=always
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target

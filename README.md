@@ -115,11 +115,17 @@ This method has been tested on a `Debian 12 LXC container`.
 To install Python 3.11 and create a virtual environment with dependencies from `requirements.txt`, execute the following command in your terminal:
 
 ```bash
+cd /opt
 git clone https://github.com/Krafting/save-discord-messages
 cd save-discord-messages
 sudo apt update && sudo apt install -y python3.11 python3.11-venv 
 python3.11 -m venv .venv
 source .venv/bin/activate && pip install -r requirements.txt
+
+# Auto start service
+sudo cp discord-bot.service /lib/systemd/system/
+sudo systemctl daemon-reload
+
 ```
 
 This command does the following:
