@@ -7,6 +7,7 @@ from datetime import date
 import re
 import hashlib
 import random
+import shutil
 import requests
 
 
