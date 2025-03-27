@@ -125,7 +125,7 @@ source .venv/bin/activate && pip install -r requirements.txt
 # Auto start service
 sudo cp discord-bot.service /lib/systemd/system/
 sudo systemctl daemon-reload
-
+sudo systemctl enable --now discord-bot.service
 ```
 
 This command does the following:
@@ -135,3 +135,5 @@ This command does the following:
 3. Creates a virtual environment named `.venv`.
 4. Activates the virtual environment.
 5. Installs the dependencies specified in `requirements.txt`.
+
+6 (Optionnal). Enable a service that start the bot at boot
