@@ -4,6 +4,10 @@ import os
 from dump import initdump
 from settings import WEBHOOK_FILE, TOKEN, CHANNEL_PATH, permissions, user_whitelist, compress_data
 from datetime import date
+import re
+import hashlib
+import requests
+
 
 class MyBot(discord.Client):
     async def on_ready(self):
@@ -105,6 +109,15 @@ class MyBot(discord.Client):
         }
 
         message_data.append(message_info)
+
+        for attachment in msg.attachments:
+            url = attachment.url
+            filename = re.search(regex, url)[0]
+
+            response = requests.get(url, stream=True)
+            with open(f"{CHANNEL_PATH}/{channel_id}/" + str(hashlib.md5(randomword(64))) + str(filename) + '.png', 'wb') as out_file:
+                shutil.copyfileobj(response.raw, out_file)
+            del response
     
         data_to_save = {
             'data': message_data,
@@ -154,11 +167,15 @@ class MyBot(discord.Client):
             }
             message_data.append(message_info)
 
+
+            regex = r"[^\/\\&\?]+\.\w{3,4}(?=([\?&].*$|$))"
+
             for attachment in msg.attachments:
                 url = attachment.url
+                filename = re.search(regex, url)[0]
 
                 response = requests.get(url, stream=True)
-                with open(f"{CHANNEL_PATH}/{channel_id}/" + hashlib.md5(randomword(64)) + '.png', 'wb') as out_file:
+                with open(f"{CHANNEL_PATH}/{channel_id}/" + str(hashlib.md5(randomword(64))) + str(filename) + '.png', 'wb') as out_file:
                     shutil.copyfileobj(response.raw, out_file)
                 del response
 
