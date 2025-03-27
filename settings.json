@@ -7,6 +7,6 @@
     "only_admins": false,
     "enable_user_whitelist": false,
     "user_whitelist": [],
-    "hour_region":"Europe/Madrid",
+    "hour_region":"Europe/Paris",
     "compress_data": false
 }

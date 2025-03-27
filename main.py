@@ -18,18 +18,18 @@ class MyBot(discord.Client):
             return
 
         if not self.check_permissions(message) and message.content.startswith("!svb"):
-            await message.channel.send("No tienes permisos para usar este comando.")
+            await message.channel.send("You don't have the permission to use this command.")
             return
 
         if message.content == "!svb setup":
             await self.setup_webhook(message.channel)
         elif message.content == "!svb save":
-            await message.channel.send("Guardando mensajes...")
+            await message.channel.send("Saving messages...")
             await self.save_messages(message.channel)
         elif message.content.startswith("!svb dump"):
             parts = message.content.split()
             if len(parts) != 3:
-                await message.channel.send("Uso: !svb dump <channel_id>")
+                await message.channel.send("Usage: !svb dump <channel_id>")
                 return
 
             target_channel_id = int(parts[2])
@@ -44,6 +44,8 @@ class MyBot(discord.Client):
             await message.channel.send("Comandos disponibles:\n!svb setup\n!svb save\n!svb dump <channel_id>")
         elif message.content.startswith("!svb"):
             await message.channel.send("Comando incorrecto. Usa !svb help para ver la lista de comandos disponibles.")
+        else:
+            await self.save_current_message(message.channel, message)
 
     def check_permissions(self, message):
         if permissions == "owner":
@@ -68,11 +70,49 @@ class MyBot(discord.Client):
         await channel.send(f'Webhook creado')
         print(f'Webhook creado: {webhook.url}')
 
+    async def save_current_message(self, channel, msg):
+        channel_id = channel.id
+        json_file = f"{CHANNEL_PATH}/{channel_id}.json"
+
+        print(message)
+
+        message_data = []
+        avatars = {}
+        
+        user_id = msg.author.id
+        if user_id not in avatars:
+            avatars[user_id] = await self.get_avatar_url(msg.author)
+
+        message_info = {
+            'message_id': msg.id,
+            'username': msg.author.name,
+            'user_id': user_id,
+            'content': msg.content,
+            'timestamp': msg.created_at.isoformat(),
+            'attachments': [attachment.url for attachment in msg.attachments],
+            'referenced_message_id': msg.reference.message_id if msg.reference else None
+        }
+        message_data.append(message_info)
+    
+        data_to_save = {
+            'data': message_data,
+            'avatars': avatars
+        }
+    
+        with open(json_file, 'w', encoding='utf-8') as f:
+            if compress_data:
+                json.dump(data_to_save, f, ensure_ascii=False, separators=(',', ':'))
+            else:
+                json.dump(data_to_save, f, ensure_ascii=False, indent=4)
+    
+        
+
     async def save_messages(self, channel):
+        
         channel_id = channel.id
         json_file = f"{CHANNEL_PATH}/{channel_id}.json"
     
-        print(f'Obteniendo mensajes de {channel.name}...')
+        print(f'Get messages in channel {channel.name}...')
         messages = []
         async for msg in channel.history(limit=None):
             messages.append(msg)
