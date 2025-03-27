@@ -117,7 +117,7 @@ class MyBot(discord.Client):
             filename = re.search(regex, url)[0]
 
             response = requests.get(url, stream=True)
-            with open(f"{CHANNEL_PATH}/{channel_id}/" + str(hashlib.md5(self.randomword(64))) + str(filename) + '.png', 'wb') as out_file:
+            with open(f"{CHANNEL_PATH}/{channel_id}/" + str(hashlib.md5(str(random.random()).encode()).hexdigest()) + str(filename) + '.png', 'wb') as out_file:
                 shutil.copyfileobj(response.raw, out_file)
             del response
     
@@ -177,7 +177,7 @@ class MyBot(discord.Client):
                 filename = re.search(regex, url)[0]
 
                 response = requests.get(url, stream=True)
-                with open(f"{CHANNEL_PATH}/{channel_id}/" + str(hashlib.md5(self.randomword(64))) + str(filename) + '.png', 'wb') as out_file:
+                with open(f"{CHANNEL_PATH}/{channel_id}/" + str(hashlib.md5(str(random.random()).encode()).hexdigest()) + str(filename) + '.png', 'wb') as out_file:
                     shutil.copyfileobj(response.raw, out_file)
                 del response
 
@@ -198,10 +198,6 @@ class MyBot(discord.Client):
 
     async def get_avatar_url(self, user):
         return str(user.display_avatar.url)
-
-    async def randomword(self, length): 
-        letters = string.ascii_lowercase
-        return ''.join(random.choice(letters) for i in range(length))
 
 
 intents = discord.Intents.default()
