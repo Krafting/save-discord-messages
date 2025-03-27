@@ -119,7 +119,7 @@ class MyBot(discord.Client):
             filename = re.search(regex, url)[0]
 
             response = requests.get(url, stream=True)
-            with open(f"{CHANNEL_PATH}/{channel.name}-{channel_id}/" + str(hashlib.md5(str(random.random()).encode()).hexdigest()) + str(filename) + '.png', 'wb') as out_file:
+            with open(f"{CHANNEL_PATH}/{channel.name}-{channel_id}/" + str(hashlib.md5(str(random.random()).encode()).hexdigest()) + '-' + str(filename), 'wb') as out_file:
                 shutil.copyfileobj(response.raw, out_file)
             del response
     
@@ -179,7 +179,7 @@ class MyBot(discord.Client):
                 filename = re.search(regex, url)[0]
 
                 response = requests.get(url, stream=True)
-                with open(f"{CHANNEL_PATH}/{channel.name}-{channel_id}/" + str(hashlib.md5(str(random.random()).encode()).hexdigest()) + str(filename) + '.png', 'wb') as out_file:
+                with open(f"{CHANNEL_PATH}/{channel.name}-{channel_id}/" + str(hashlib.md5(str(random.random()).encode()).hexdigest()) +  '-' + str(filename), 'wb') as out_file:
                     shutil.copyfileobj(response.raw, out_file)
                 del response
 
