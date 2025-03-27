@@ -199,7 +199,7 @@ class MyBot(discord.Client):
     async def get_avatar_url(self, user):
         return str(user.display_avatar.url)
 
-    async def randomword(length): 
+    async def randomword(self, length): 
         letters = string.ascii_lowercase
         return ''.join(random.choice(letters) for i in range(length))
 
