@@ -110,6 +110,8 @@ class MyBot(discord.Client):
 
         message_data.append(message_info)
 
+        regex = r"[^\/\\&\?]+\.\w{3,4}(?=([\?&].*$|$))"
+
         for attachment in msg.attachments:
             url = attachment.url
             filename = re.search(regex, url)[0]
