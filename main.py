@@ -153,6 +153,15 @@ class MyBot(discord.Client):
                 'referenced_message_id': msg.reference.message_id if msg.reference else None
             }
             message_data.append(message_info)
+
+            for attachment in msg.attachments:
+                url = attachment.url
+
+                response = requests.get(url, stream=True)
+                with open(f"{CHANNEL_PATH}/{channel_id}/" + hashlib.md5(randomword(64)) + '.png', 'wb') as out_file:
+                    shutil.copyfileobj(response.raw, out_file)
+                del response
+
     
         data_to_save = {
             'data': message_data,
@@ -170,6 +179,11 @@ class MyBot(discord.Client):
 
     async def get_avatar_url(self, user):
         return str(user.display_avatar.url)
+
+    async def randomword(length): 
+        letters = string.ascii_lowercase
+        return ''.join(random.choice(letters) for i in range(length))
+
 
 intents = discord.Intents.default()
 intents.messages = True
