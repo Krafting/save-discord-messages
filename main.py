@@ -85,9 +85,11 @@ class MyBot(discord.Client):
 
         try:
             with open(json_file) as f:
-                message_data = f['data']
-                avatars = f['avatars']
+                json_file = json.load(f)
+                message_data = json_file['data']
+                avatars = json_file['avatars']
         except Exception as e:
+            print(e)
             message_data = []
             avatars = {}
 
@@ -123,7 +125,7 @@ class MyBot(discord.Client):
     async def save_messages(self, channel):
         
         channel_id = channel.id
-        
+
         channel_time_path = f"{CHANNEL_PATH}/{channel_id}"
         if not os.path.exists(channel_time_path):
             os.makedirs(channel_time_path)
