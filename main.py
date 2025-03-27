@@ -80,9 +80,6 @@ class MyBot(discord.Client):
 
         json_file = f"{CHANNEL_PATH}/{channel_id}/{channel_id}_{date.today()}.json"
 
-        print(message)
-
-
         try:
             with open(json_file) as f:
                 json_file = json.load(f)
