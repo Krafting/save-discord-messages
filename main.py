@@ -80,11 +80,11 @@ class MyBot(discord.Client):
     async def save_current_message(self, channel, msg):
         channel_id = channel.id
 
-        channel_time_path = f"{CHANNEL_PATH}/{channel_id}"
+        channel_time_path = f"{CHANNEL_PATH}/{channel.name}-{channel_id}"
         if not os.path.exists(channel_time_path):
             os.makedirs(channel_time_path)
 
-        json_file = f"{CHANNEL_PATH}/{channel_id}/{channel_id}_{date.today()}.json"
+        json_file = f"{CHANNEL_PATH}/{channel.name}-{channel_id}/{channel_id}_{date.today()}.json"
 
         try:
             with open(json_file) as f:
@@ -119,7 +119,7 @@ class MyBot(discord.Client):
             filename = re.search(regex, url)[0]
 
             response = requests.get(url, stream=True)
-            with open(f"{CHANNEL_PATH}/{channel_id}/" + str(hashlib.md5(str(random.random()).encode()).hexdigest()) + str(filename) + '.png', 'wb') as out_file:
+            with open(f"{CHANNEL_PATH}/{channel.name}-{channel_id}/" + str(hashlib.md5(str(random.random()).encode()).hexdigest()) + str(filename) + '.png', 'wb') as out_file:
                 shutil.copyfileobj(response.raw, out_file)
             del response
     
@@ -140,11 +140,11 @@ class MyBot(discord.Client):
         
         channel_id = channel.id
 
-        channel_time_path = f"{CHANNEL_PATH}/{channel_id}"
+        channel_time_path = f"{CHANNEL_PATH}/{channel.name}-{channel_id}"
         if not os.path.exists(channel_time_path):
             os.makedirs(channel_time_path)
 
-        json_file = f"{CHANNEL_PATH}/{channel_id}/{channel_id}_{date.today()}.json"
+        json_file = f"{CHANNEL_PATH}/{channel.name}-{channel_id}/{channel_id}_{date.today()}.json"
 
         print(f'Get messages in channel {channel.name}...')
         messages = []
@@ -179,7 +179,7 @@ class MyBot(discord.Client):
                 filename = re.search(regex, url)[0]
 
                 response = requests.get(url, stream=True)
-                with open(f"{CHANNEL_PATH}/{channel_id}/" + str(hashlib.md5(str(random.random()).encode()).hexdigest()) + str(filename) + '.png', 'wb') as out_file:
+                with open(f"{CHANNEL_PATH}/{channel.name}-{channel_id}/" + str(hashlib.md5(str(random.random()).encode()).hexdigest()) + str(filename) + '.png', 'wb') as out_file:
                     shutil.copyfileobj(response.raw, out_file)
                 del response
 
