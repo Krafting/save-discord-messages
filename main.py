@@ -3,6 +3,7 @@ import json
 import os
 from dump import initdump
 from settings import WEBHOOK_FILE, TOKEN, CHANNEL_PATH, permissions, user_whitelist, compress_data
+from datetime import date
 
 class MyBot(discord.Client):
     async def on_ready(self):
@@ -72,13 +73,24 @@ class MyBot(discord.Client):
 
     async def save_current_message(self, channel, msg):
         channel_id = channel.id
-        json_file = f"{CHANNEL_PATH}/{channel_id}.json"
+
+        channel_time_path = f"{CHANNEL_PATH}/{channel_id}"
+        if not os.path.exists(channel_time_path):
+            os.makedirs(channel_time_path)
+
+        json_file = f"{CHANNEL_PATH}/{channel_id}/{channel_id}_{date.today()}.json"
 
         print(message)
 
-        message_data = []
-        avatars = {}
-        
+
+        try:
+            with open(json_file) as f:
+                message_data = f['data']
+                avatars = f['avatars']
+        except Exception as e:
+            message_data = []
+            avatars = {}
+
         user_id = msg.author.id
         if user_id not in avatars:
             avatars[user_id] = await self.get_avatar_url(msg.author)
@@ -92,6 +104,7 @@ class MyBot(discord.Client):
             'attachments': [attachment.url for attachment in msg.attachments],
             'referenced_message_id': msg.reference.message_id if msg.reference else None
         }
+
         message_data.append(message_info)
     
         data_to_save = {
@@ -110,8 +123,13 @@ class MyBot(discord.Client):
     async def save_messages(self, channel):
         
         channel_id = channel.id
-        json_file = f"{CHANNEL_PATH}/{channel_id}.json"
-    
+        
+        channel_time_path = f"{CHANNEL_PATH}/{channel_id}"
+        if not os.path.exists(channel_time_path):
+            os.makedirs(channel_time_path)
+
+        json_file = f"{CHANNEL_PATH}/{channel_id}/{channel_id}_{date.today()}.json"
+
         print(f'Get messages in channel {channel.name}...')
         messages = []
         async for msg in channel.history(limit=None):
