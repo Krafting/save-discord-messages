@@ -82,9 +82,9 @@ class MyBot(discord.Client):
 
         try:
             with open(json_file) as f:
-                json_file = json.load(f)
-                message_data = json_file['data']
-                avatars = json_file['avatars']
+                json_file_content = json.load(f)
+                message_data = json_file_content['data']
+                avatars = json_file_content['avatars']
         except Exception as e:
             print(e)
             message_data = []
