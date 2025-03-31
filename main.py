@@ -1,7 +1,6 @@
 import discord
 import json
 import os
-from dump import initdump
 from settings import WEBHOOK_FILE, TOKEN, CHANNEL_PATH, permissions, user_whitelist, compress_data
 from datetime import date
 import re
@@ -13,12 +12,12 @@ import requests
 
 class MyBot(discord.Client):
     async def on_ready(self):
-        print(f'Bot conectado como {self.user}')
+        print(f'Bot connected to {self.user}')
         self.webhooks = {}
         if os.path.exists(WEBHOOK_FILE):
             with open(WEBHOOK_FILE, 'r', encoding='utf-8') as f:
                 self.webhooks = json.load(f)
-                print(f'Webhooks cargados: {self.webhooks}')
+                print(f'Webhooks loaded: {self.webhooks}')
 
     async def on_message(self, message):
         if message.author == self.user:
@@ -33,24 +32,10 @@ class MyBot(discord.Client):
         elif message.content == "!svb save":
             await message.channel.send("Saving messages...")
             await self.save_messages(message.channel)
-        elif message.content.startswith("!svb dump"):
-            parts = message.content.split()
-            if len(parts) != 3:
-                await message.channel.send("Usage: !svb dump <channel_id>")
-                return
-
-            target_channel_id = int(parts[2])
-            target_channel = self.get_channel(target_channel_id)
-            if target_channel is None:
-                await message.channel.send(f"No se pudo encontrar el canal con ID {target_channel_id}")
-                return
-
-            await self.setup_webhook(message.channel)
-            await initdump(self.webhooks[str(message.channel.id)], target_channel_id)
         elif message.content == "!svb help":
-            await message.channel.send("Comandos disponibles:\n!svb setup\n!svb save\n!svb dump <channel_id>")
+            await message.channel.send("Available commands:\n!svb setup\n!svb save")
         elif message.content.startswith("!svb"):
-            await message.channel.send("Comando incorrecto. Usa !svb help para ver la lista de comandos disponibles.")
+            await message.channel.send("Incorrect command. Use !svb to see the list of available commands.")
         else:
             await self.save_current_message(message.channel, message)
 
@@ -67,15 +52,15 @@ class MyBot(discord.Client):
 
     async def setup_webhook(self, channel):
         if str(channel.id) in self.webhooks:
-            await channel.send(f'Ya existe un webhook para este canal')
+            await channel.send(f'A webhook already exists for this channel.')
             return
 
         webhook = await channel.create_webhook(name='SaveBot')
         self.webhooks[str(channel.id)] = webhook.url
         with open(WEBHOOK_FILE, 'w', encoding='utf-8') as f:
             json.dump(self.webhooks, f, ensure_ascii=False, indent=4)
-        await channel.send(f'Webhook creado')
-        print(f'Webhook creado: {webhook.url}')
+        await channel.send(f'Webhook created')
+        print(f'Webhook created: {webhook.url}')
 
     async def save_current_message(self, channel, msg):
         channel_id = channel.id
@@ -208,11 +193,10 @@ class MyBot(discord.Client):
         await channel.send(f'Saved {len(messages)} messages')
 
     async def get_avatar_url(self, user):
+        """
+        Get user Avatar
+        """
         return str(user.display_avatar.url)
-
-    async def sha256sum(filename):
-        with open(filename, 'rb', buffering=0) as f:
-            return hashlib.file_digest(f, 'sha256').hexdigest()
 
 intents = discord.Intents.default()
 intents.messages = True
