@@ -111,7 +111,6 @@ class MyBot(discord.Client):
             'referenced_message_id': msg.reference.message_id if msg.reference else None
         }
 
-        message_data.append(message_info)
 
         regex = r"[^\/\\&\?]+\.\w{3,4}(?=([\?&].*$|$))"
 
@@ -120,12 +119,14 @@ class MyBot(discord.Client):
             filename = re.search(regex, url)[0]
 
             random_hash = str(hashlib.md5(str(random.random()).encode()).hexdigest())
-            message_data[0]['attachments_refs'].append(random_hash)
+            message_info['attachments_refs'].append(random_hash)
 
             response = requests.get(url, stream=True)
             with open(f"{CHANNEL_PATH}/{channel.name}-{channel_id}/" + random_hash + '-' + str(filename), 'wb') as out_file:
                 shutil.copyfileobj(response.raw, out_file)
             del response
+
+        message_data.append(message_info)
     
         data_to_save = {
             'data': message_data,
@@ -175,7 +176,6 @@ class MyBot(discord.Client):
                 'referenced_message_id': msg.reference.message_id if msg.reference else None
             }
 
-            message_data.append(message_info)
 
             regex = r"[^\/\\&\?]+\.\w{3,4}(?=([\?&].*$|$))"
 
@@ -184,12 +184,14 @@ class MyBot(discord.Client):
                 filename = re.search(regex, url)[0]
 
                 random_hash = str(hashlib.md5(str(random.random()).encode()).hexdigest())
-                message_data[0]['attachments_refs'].append(random_hash)
+                message_info['attachments_refs'].append(random_hash)
+                
                 response = requests.get(url, stream=True)
                 with open(f"{CHANNEL_PATH}/{channel.name}-{channel_id}/" + random_hash +  '-' + str(filename), 'wb') as out_file:
                     shutil.copyfileobj(response.raw, out_file)
                 del response
 
+            message_data.append(message_info)
     
         data_to_save = {
             'data': message_data,
